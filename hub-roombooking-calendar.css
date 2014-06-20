@@ -1,0 +1,68 @@
+/*
+  #33ccff smallmeetingroom
+  #3366ff largemeetingroom
+  #003DF5 gallery
+  #ff3366 arch
+  #ffcc33 garagemeetingroom
+  #ff6633 garage
+*/
+.room {
+  border: 0 !important;
+  color: #fff !important;
+  transition: background-color 0.3s, opacity 0.3s;
+  opacity: 1;
+}
+.room.smallmeetingroom {
+  background-color: #33ccff !important;
+}
+.room.largemeetingroom {
+  background-color: #3366ff !important;
+}
+.room.gallery {
+  background-color: #003DF5 !important;
+}
+.room.arch {
+  background-color: #ff3366 !important;
+}
+.room.garagemeetingroom {
+  background-color: #ffcc33 !important;
+}
+.room.garage {
+  background-color: #ff6633 !important;
+}
+
+[data-filter] .room {
+  opacity: 0;
+}
+[data-filter] .room.smallmeetingroom {
+  background-color: #202020 !important;
+}
+[data-filter] .room.largemeetingroom {
+  background-color: #202020 !important;
+}
+[data-filter] .room.gallery {
+  background-color: #202020 !important;
+}
+[data-filter] .room.arch {
+  background-color: #202020 !important;
+}
+[data-filter] .room.garagemeetingroom {
+  background-color: #202020 !important;
+}
+[data-filter] .room.garage {
+  background-color: #202020 !important;
+}
+
+[data-filter="smallmeetingroom"] .room.gallery,
+[data-filter="smallmeetingroom"] .room.arch,
+[data-filter="largemeetingroom"] .room.gallery,
+[data-filter="largemeetingroom"] .room.arch,
+[data-filter="gallery"] .room.smallmeetingroom,
+[data-filter="gallery"] .room.largemeetingroom,
+[data-filter="gallery"] .room.arch,
+[data-filter="arch"] .room.smallmeetingroom,
+[data-filter="arch"] .room.largemeetingroom,
+[data-filter="arch"] .room.gallery,
+[data-filter="arch"] .room.arch {
+  opacity: 1;
+}
