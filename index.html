@@ -15,11 +15,6 @@
   h6 { margin: 0; }
   header { padding: 18px 18px 24px; background: #222; color: #fff; background-image: linear-gradient(90deg, #2C2A86 20.5%, #078D2D 20.5%, #078D2D 37.5%, #FCB20D 37.5%, #FCB20D 55.5%, #EC5100 55.5%, #EC5100 72.5%, #6A3C06 72.5%, #6A3C06 79.5%, #C01C1B 79.5%); /* hoodie hoodie hoodie! */ background-size: 300px 6px; background-repeat: repeat-x; background-position: 0 100%; }
   header a { color: #fff !important; }
-  table { margin: 24px 0 0; }
-  var { font-style: normal;}
-  p.info { padding: 0; margin: 0; font-size: 10px; color: #888; }
-  p.info a { color: inherit; text-decoration: underline; }
-  td:first-child, th:first-child { width: 300px; padding-left: 0 !important;}
   </style>
 </head>
 
@@ -35,15 +30,30 @@
   <script src="bower_components/jquery/dist/jquery.js"></script>
   <script src="bower_components/moment/moment.js"></script>
   <script src="bower_components/fullcalendar/dist/fullcalendar.js"></script>
+  <script src="bower_components/hub-roombooking-api/hub-roombooking-api.js"></script>
   <script src="hub-roombooking-calendar.js"></script>
   <script>
+
+    var googleScriptId = 'AKfycbzhQl_MmOFR6KToR9lhg1QZQOK5qYl63TLPQeKJB51ax_DWSyPd';
+    var loadEventsPromise;
+
+    hubRoombookingApi.setup({googleScriptId: googleScriptId})
+    loadEventsPromise = hubRoombookingApi.getReservations();
+
     $(document).ready(function() {
 
-        // page is now ready, initialize the calendar...
-
-        $('#calendar').fullCalendar({
-            // put your options and callbacks here
-        })
+      // page is now ready, initialize the calendar...
+      $('#calendar').fullCalendar({
+          header: {
+            left:   'title',
+            center: '',
+            right:  'today month basicWeek basicDay prev,next'
+          },
+          firstDay: 1, // Monday
+          events: function(start, end, timezone, callback) {
+            loadEventsPromise.done(callback)
+          }
+      })
 
     });
   </script>
