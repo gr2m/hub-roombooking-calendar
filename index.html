@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Hub Roombooking Calendar</title>
+
+  <link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="bower_components/fullcalendar/dist/fullcalendar.css">
+  <link rel="stylesheet" type="text/css" href="bower_components/fullcalendar/dist/fullcalendar.print.css">
+
+  <style>
+  html, body { padding: 0; margin: 0; font-family: Helvetica, Arial; }
+  .main { padding: 18px; }
+  h1 { margin: 0; font-size: 28px; font-weight: bold; }
+  h6 { margin: 0; }
+  header { padding: 18px 18px 24px; background: #222; color: #fff; background-image: linear-gradient(90deg, #2C2A86 20.5%, #078D2D 20.5%, #078D2D 37.5%, #FCB20D 37.5%, #FCB20D 55.5%, #EC5100 55.5%, #EC5100 72.5%, #6A3C06 72.5%, #6A3C06 79.5%, #C01C1B 79.5%); /* hoodie hoodie hoodie! */ background-size: 300px 6px; background-repeat: repeat-x; background-position: 0 100%; }
+  header a { color: #fff !important; }
+  table { margin: 24px 0 0; }
+  var { font-style: normal;}
+  p.info { padding: 0; margin: 0; font-size: 10px; color: #888; }
+  p.info a { color: inherit; text-decoration: underline; }
+  td:first-child, th:first-child { width: 300px; padding-left: 0 !important;}
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Hub Roombooking Calendar</h1>
+  </header>
+
+  <div class="main">
+    <div id='calendar'></div>
+  </div>
+
+  <script src="bower_components/jquery/dist/jquery.js"></script>
+  <script src="bower_components/moment/moment.js"></script>
+  <script src="bower_components/fullcalendar/dist/fullcalendar.js"></script>
+  <script src="hub-roombooking-calendar.js"></script>
+  <script>
+    $(document).ready(function() {
+
+        // page is now ready, initialize the calendar...
+
+        $('#calendar').fullCalendar({
+            // put your options and callbacks here
+        })
+
+    });
+  </script>
+</body>
+</html>

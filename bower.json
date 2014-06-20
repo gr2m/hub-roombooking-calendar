@@ -1,0 +1,28 @@
+{
+  "name": "hub-roombooking-calendar",
+  "version": "0.0.1",
+  "authors": [
+    "Gregor Martynus <gregor@martynus.net>"
+  ],
+  "description": "Impact Hub Zurich Room Booking API",
+  "main": "hub-roombooking-calendar.js",
+  "keywords": [],
+  "license": "MIT",
+  "homepage": "http://gr2m.github.io/hub-roombooking-api",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "qunit": "~1.14.0",
+    "bootstrap": "~3.1.1"
+  },
+  "dependencies": {
+    "hub-roombooking-api": "git@github.com:gr2m/hub-roombooking-api.git#gh-pages",
+    "fullcalendar": "~2.0.1",
+    "moment": "~2.7.0"
+  }
+}

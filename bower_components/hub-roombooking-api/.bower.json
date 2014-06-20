@@ -1,0 +1,33 @@
+{
+  "name": "hub-roombooking-api",
+  "authors": [
+    "Gregor Martynus <gregor@martynus.net>"
+  ],
+  "description": "Impact Hub Zurich Room Booking API",
+  "main": "hub-roombooking-api.js",
+  "keywords": [],
+  "license": "MIT",
+  "homepage": "http://gr2m.github.io/hub-roombooking-api",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "qunit": "~1.14.0",
+    "bootstrap": "~3.1.1"
+  },
+  "dependencies": {},
+  "_release": "8492a5ef53",
+  "_resolution": {
+    "type": "branch",
+    "branch": "gh-pages",
+    "commit": "8492a5ef53adf8a3186161449ff2db158665dee0"
+  },
+  "_source": "git@github.com:gr2m/hub-roombooking-api.git",
+  "_target": "gh-pages",
+  "_originalSource": "git@github.com:gr2m/hub-roombooking-api.git",
+  "_direct": true
+}
