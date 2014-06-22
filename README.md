@@ -11,9 +11,11 @@ Calendar Widget based on [fullcalendar](http://arshaw.com/fullcalendar).
 // the form is https://script.google.com/macros/s/<googleScriptId>/exec
 var googleScriptId = 'AKfycbw_tyfAnJhuKz4VXlLtb0904iuAfDdQ5LIaSqklNdqa3u0tC3k';
 $( '#calendar').hubRoombookingCalendar({
-    googleScriptId: googleScriptId,
-
-    view: 'month' // month or week. Defaults to month
+  googleScriptId: googleScriptId,
+  view: 'month', // month or week. Defaults to month
+  select: function(start, end) { // if not set, selecting timeframes is disabled
+    // start / end are moment instances
+  }
 });
 ```
 

@@ -73,12 +73,15 @@
   background-color: #202020 !important;
 }
 
+[data-filter="smallmeetingroom"] .room.smallmeetingroom,
 [data-filter="smallmeetingroom"] .room.gallery,
 [data-filter="smallmeetingroom"] .room.arch,
+[data-filter="largemeetingroom"] .room.largemeetingroom,
 [data-filter="largemeetingroom"] .room.gallery,
 [data-filter="largemeetingroom"] .room.arch,
 [data-filter="gallery"] .room.smallmeetingroom,
 [data-filter="gallery"] .room.largemeetingroom,
+[data-filter="gallery"] .room.gallery,
 [data-filter="gallery"] .room.arch,
 [data-filter="arch"] .room.smallmeetingroom,
 [data-filter="arch"] .room.largemeetingroom,

@@ -61,18 +61,15 @@
       // page is now ready, initialize the calendar...
       $calendar.hubRoombookingCalendar({
         googleScriptId: googleScriptId,
-        view: 'week'
+        select: function(start, end) {
+          console.log('SELECTED %s %s - %s', start.format('D.M.YY'), start.format('h:mm'), end.format('h:mm'))
+        }
       });
     });
 
     $('select').on('change', function(event) {
       var room = event.target.value;
-      room = room.toLowerCase().replace(/ /g, '');
-      if (room === 'all') {
-        $calendar.removeAttr('data-filter');
-      } else {
-        $calendar.attr('data-filter', room);
-      }
+      $calendar.hubRoombookingCalendar('filter', room);
     });
   </script>
 </body>

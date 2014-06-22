@@ -15,11 +15,19 @@
 })(this, function ($, hubRoombookingApi) {
   'use strict';
 
-  function HubRoombookingCalendar($el, options) {
+  function HubRoombookingCalendar($wrapper, options) {
+    var api = this;
     var loadEventsPromise;
     var $monthWeekCalendar = $('<div class="monthWeekCalendar" data-view="month" />');
     var $dayCalendar = $('<div class="dayCalendar" />');
+
+    // handle options
     var defaultView = options.view || 'month';
+    var selectable = !! options.select;
+
+    // if roomFilter is set, only events that would block the set
+    // room are displayed, the others are hidden
+    var roomFilter;
 
     if (defaultView === 'week') defaultView = 'agendaWeek';
 
@@ -42,15 +50,8 @@
       hubRoombookingApi.setup(options);
       // loadEventsPromise = hubRoombookingApi.getReservations();
       loadEventsPromise = $.Deferred().resolve(fixtures);
-      loadEventsPromise = loadEventsPromise.then(function(events) {
-        return events.map(function(event) {
-          var roomName = normalize(event.location);
-          event.className = ['room', roomName];
-          return event;
-        });
-      });
 
-      $el.append($monthWeekCalendar).append($dayCalendar).addClass('calendarWrapper');
+      $wrapper.append($monthWeekCalendar).append($dayCalendar).addClass('calendarWrapper');
 
       $monthWeekCalendar.fullCalendar($.extend({}, baseCalendarOptions, {
         header: {
@@ -60,24 +61,16 @@
         },
         selectable: true,
         // selectHelper: true,
-        select: function(start, end) {
-          console.log('%s - %s selected!', start.format('hh:mm'), end.format('hh:mm'));
-          $dayCalendar.fullCalendar( 'gotoDate', start );
-          // var title = prompt('Event Title:');
-          // var eventData;
-          // if (title) {
-          //   eventData = {
-          //     title: title,
-          //     start: start,
-          //     end: end
-          //   };
-          //   $('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
-          // }
-          // $('#calendar').fullCalendar('unselect');
+        select: selectDay,
+        eventDataTransform: function(event) {
+          var roomName = normalize(event.location);
+          event.className = ['room', roomName];
+          return event;
         },
         viewRender: function(view) {
           // don't use .data API here, we depend on data- attribute for CSS
           var currentViewName = $monthWeekCalendar.attr('data-view');
+          var calendarOptions = $monthWeekCalendar.fullCalendar('getView').calendar.options;
 
           if (view.name === currentViewName) return;
 
@@ -86,6 +79,8 @@
 
             $monthWeekCalendar.fullCalendar('render');
             $dayCalendar.fullCalendar('render');
+            calendarOptions.selectable = true;
+            calendarOptions.select = selectDay;
           }
           if (view.name === 'agendaWeek') {
             $monthWeekCalendar.attr('data-view', 'agendaWeek');
@@ -93,6 +88,9 @@
               selectable: false,
               height:1000
             });
+
+            calendarOptions.selectable = selectable;
+            calendarOptions.select = options.select;
 
             $monthWeekCalendar.fullCalendar('render');
           }
@@ -106,11 +104,29 @@
         viewRender: function(view) {
           $monthWeekCalendar.fullCalendar( 'gotoDate', view.intervalStart );
           $monthWeekCalendar.fullCalendar( 'select', view.intervalStart );
-        }
+        },
+        selectable: selectable,
+        select: options.select
       }));
     }
 
+    api.filter = function filter(roomName) {
+      roomFilter = normalize(roomName);
+      if (roomFilter === 'all') {
+        roomFilter = undefined;
+        $wrapper.removeAttr('data-filter');
+      } else {
+        $wrapper.attr('data-filter', roomFilter);
+      }
+    };
+
+    function selectDay (start) {
+      $dayCalendar.fullCalendar( 'gotoDate', start );
+    }
+
     initialize();
+
+    return api;
   }
 
   // PRIVATE
@@ -134,6 +150,7 @@
 
     if (!api) {
       this.data('bs.editableTable', (api = new HubRoombookingCalendar(this, option)));
+      this.data('hubRoombookingCalendar', api);
     }
 
     // api call
