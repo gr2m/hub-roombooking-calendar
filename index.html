@@ -63,13 +63,14 @@
         googleScriptId: googleScriptId,
         select: function(start, end) {
           console.log('SELECTED %s %s - %s', start.format('D.M.YY'), start.format('h:mm'), end.format('h:mm'))
-        }
+        },
+        filterFor: 'small meeting room'
       });
     });
 
     $('select').on('change', function(event) {
       var room = event.target.value;
-      $calendar.hubRoombookingCalendar('filter', room);
+      $calendar.hubRoombookingCalendar('filterFor', room);
     });
   </script>
 </body>

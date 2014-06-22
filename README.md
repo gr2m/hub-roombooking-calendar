@@ -15,8 +15,13 @@ $( '#calendar').hubRoombookingCalendar({
   view: 'month', // month or week. Defaults to month
   select: function(start, end) { // if not set, selecting timeframes is disabled
     // start / end are moment instances
-  }
+  },
+  filterFor: 'Small Meeting Room' // setting the filter shows only bookings that would conflict with the passed room name
 });
+
+// methods
+$( '#calendar').hubRoombookingCalendar('filterFor', 'Arch');
+$( '#calendar').hubRoombookingCalendar('select', start, end);
 ```
 
 Fine Print

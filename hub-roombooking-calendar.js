@@ -114,13 +114,17 @@
         selectHelper: selectable,
         select: selectCallback
       }));
+
+      if (options.filterFor) {
+        api.filterFor(options.filterFor);
+      }
     }
 
 
     //
     //
     //
-    api.filter = function filter(roomName) {
+    api.filterFor = function filterFor(roomName) {
       roomFilter = normalize(roomName);
       if (roomFilter === 'all') {
         roomFilter = undefined;
