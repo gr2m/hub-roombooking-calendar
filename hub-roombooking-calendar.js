@@ -17,47 +17,97 @@
 
   function HubRoombookingCalendar($el, options) {
     var loadEventsPromise;
+    var $monthWeekCalendar = $('<div class="monthWeekCalendar" data-view="month" />');
+    var $dayCalendar = $('<div class="dayCalendar" />');
+    var defaultView = options.view || 'month';
+
+    if (defaultView === 'week') defaultView = 'agendaWeek';
 
     function initialize () {
-      hubRoombookingApi.setup(options);
-      loadEventsPromise = hubRoombookingApi.getReservations();
-      // loadEventsPromise = $.Deferred().resolve(fixtures);
-
-      $el.fullCalendar({
+      var baseCalendarOptions = {
         header: {
           left:   'title',
           center: '',
-          right:  'today month agendaWeek prev,next'
+          right:  'prev,next'
         },
+        agenda: 'h:mm',
+        timeFormat: 'h:mm',
         minTime: '07:00:00',
-        // selectable: true,
-        // selectHelper: true,
-        // select: function(start, end) {
-        //   console.log('%s - %s selected!', start.format('hh:mm'), end.format('hh:mm'));
-        //   // var title = prompt('Event Title:');
-        //   // var eventData;
-        //   // if (title) {
-        //   //   eventData = {
-        //   //     title: title,
-        //   //     start: start,
-        //   //     end: end
-        //   //   };
-        //   //   $('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
-        //   // }
-        //   // $('#calendar').fullCalendar('unselect');
-        // },
-        // editable: true,
         firstDay: 1, // Monday
+        height: 600,
         events: function(start, end, timezone, callback) {
-          loadEventsPromise.then(function(events) {
-            return events.map(function(event) {
-              var roomName = normalize(event.location);
-              event.className = ['room', roomName];
-              return event;
-            });
-          }).done(callback);
+          loadEventsPromise.done(callback);
         }
+      };
+      hubRoombookingApi.setup(options);
+      // loadEventsPromise = hubRoombookingApi.getReservations();
+      loadEventsPromise = $.Deferred().resolve(fixtures);
+      loadEventsPromise = loadEventsPromise.then(function(events) {
+        return events.map(function(event) {
+          var roomName = normalize(event.location);
+          event.className = ['room', roomName];
+          return event;
+        });
       });
+
+      $el.append($monthWeekCalendar).append($dayCalendar).addClass('calendarWrapper');
+
+      $monthWeekCalendar.fullCalendar($.extend({}, baseCalendarOptions, {
+        header: {
+          left:   'title',
+          center: '',
+          right:  'month agendaWeek prev,next'
+        },
+        selectable: true,
+        // selectHelper: true,
+        select: function(start, end) {
+          console.log('%s - %s selected!', start.format('hh:mm'), end.format('hh:mm'));
+          $dayCalendar.fullCalendar( 'gotoDate', start );
+          // var title = prompt('Event Title:');
+          // var eventData;
+          // if (title) {
+          //   eventData = {
+          //     title: title,
+          //     start: start,
+          //     end: end
+          //   };
+          //   $('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
+          // }
+          // $('#calendar').fullCalendar('unselect');
+        },
+        viewRender: function(view) {
+          // don't use .data API here, we depend on data- attribute for CSS
+          var currentViewName = $monthWeekCalendar.attr('data-view');
+
+          if (view.name === currentViewName) return;
+
+          if (view.name === 'month') {
+            $monthWeekCalendar.attr('data-view', 'month');
+
+            $monthWeekCalendar.fullCalendar('render');
+            $dayCalendar.fullCalendar('render');
+          }
+          if (view.name === 'agendaWeek') {
+            $monthWeekCalendar.attr('data-view', 'agendaWeek');
+            $monthWeekCalendar.fullCalendar({
+              selectable: false,
+              height:1000
+            });
+
+            $monthWeekCalendar.fullCalendar('render');
+          }
+        },
+        // editable: true,
+        defaultView: defaultView
+      }));
+
+      $dayCalendar.fullCalendar($.extend({}, baseCalendarOptions, {
+        defaultView: 'agendaDay',
+        viewRender: function(view) {
+          $monthWeekCalendar.fullCalendar( 'gotoDate', view.intervalStart );
+          $monthWeekCalendar.fullCalendar( 'select', view.intervalStart );
+        }
+      }));
     }
 
     initialize();

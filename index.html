@@ -59,7 +59,10 @@
 
     $(document).ready(function() {
       // page is now ready, initialize the calendar...
-      $calendar.hubRoombookingCalendar({googleScriptId: googleScriptId});
+      $calendar.hubRoombookingCalendar({
+        googleScriptId: googleScriptId,
+        view: 'week'
+      });
     });
 
     $('select').on('change', function(event) {

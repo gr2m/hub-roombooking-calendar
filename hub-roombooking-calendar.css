@@ -1,3 +1,23 @@
+.calendarWrapper {
+  overflow: hidden;
+}
+.monthWeekCalendar {
+  float: left;
+  width: 66%;
+}
+.monthWeekCalendar[data-view="agendaWeek"] {
+  width: 100%;
+}
+.dayCalendar {
+  margin-left: 70%;
+  overflow: hidden;
+  min-height: 100%;
+}
+.monthWeekCalendar[data-view="agendaWeek"] + .dayCalendar {
+  display: none;
+}
+
+
 /*
   #33ccff smallmeetingroom
   #3366ff largemeetingroom
