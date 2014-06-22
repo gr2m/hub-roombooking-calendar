@@ -24,6 +24,7 @@
     // handle options
     var defaultView = options.view || 'month';
     var selectable = !! options.select;
+    var selectCallback = getSelectCallback(options.select);
 
     // if roomFilter is set, only events that would block the set
     // room are displayed, the others are hidden
@@ -90,7 +91,8 @@
             });
 
             calendarOptions.selectable = selectable;
-            calendarOptions.select = options.select;
+            calendarOptions.selectHelper = selectable;
+            calendarOptions.select = selectCallback;
 
             $monthWeekCalendar.fullCalendar('render');
           }
@@ -106,7 +108,8 @@
           $monthWeekCalendar.fullCalendar( 'select', view.intervalStart );
         },
         selectable: selectable,
-        select: options.select
+        selectHelper: selectable,
+        select: selectCallback
       }));
     }
 
@@ -120,6 +123,37 @@
       }
     };
 
+    function getSelectCallback(callback) {
+      if (! callback) return;
+
+      return function(start, end) {
+        var error;
+        var startCheck = start.add(1, 'second');
+        var endCheck = end.subtract(1, 'second');
+        try {
+          $monthWeekCalendar.fullCalendar( 'clientEvents', function(event) {
+            var eventRoom = normalize(event.location);
+            if (event.start > endCheck || event.end < startCheck) return;
+
+            if (roomFilter && BLOCKING_ROOMS[eventRoom].indexOf(roomFilter) === -1) {
+              return;
+            }
+
+            error = new Error('Conflict');
+            error.event = event;
+            throw error;
+          });
+        } catch(error) {
+          if (error.event) {
+            $monthWeekCalendar.fullCalendar('unselect');
+            $dayCalendar.fullCalendar('unselect');
+          }
+        }
+
+
+        callback(start, end);
+      };
+    }
     function selectDay (start) {
       $dayCalendar.fullCalendar( 'gotoDate', start );
     }
@@ -130,14 +164,14 @@
   }
 
   // PRIVATE
-  // var BLOCKING_ROOMS = {
-  //   smallmeetingroom: ['gallery', 'arch'],
-  //   largemeetingroom: ['gallery', 'arch'],
-  //   gallery: ['smallmeetingroom', 'largemeetingroom', 'arch'],
-  //   arch: ['smallmeetingroom','largemeetingroom','gallery'],
-  //   garagemeetingroom: ['garage'],
-  //   garage: ['garagemeetingroom']
-  // };
+  var BLOCKING_ROOMS = {
+    smallmeetingroom: ['smallmeetingroom', 'gallery', 'arch'],
+    largemeetingroom: ['largemeetingroom', 'gallery', 'arch'],
+    gallery: ['smallmeetingroom', 'largemeetingroom', 'gallery', 'arch'],
+    arch: ['smallmeetingroom','largemeetingroom','gallery', 'arch'],
+    garagemeetingroom: ['garage'],
+    garage: ['garagemeetingroom']
+  };
 
   function normalize(string) {
     return (string || '').toLowerCase().replace(/ /g, '');
@@ -168,38 +202,38 @@
 var fixtures = [ // jshint ignore:line
   {
     title: 'Small Meeting Room',
-    start: '2014-06-19T07:00:00.000Z',
-    end: '2014-06-19T10:00:00.000Z',
+    start: '2014-06-19T08:00:00.000Z',
+    end: '2014-06-19T11:00:00.000Z',
     location: 'Small Meeting Room'
   },
   {
     title: 'Large Meeting Room',
-    start: '2014-06-20T07:00:00.000Z',
-    end: '2014-06-20T10:00:00.000Z',
+    start: '2014-06-20T08:00:00.000Z',
+    end: '2014-06-20T11:00:00.000Z',
     location: 'Large Meeting Room'
   },
   {
     title: 'Gallery',
-    start: '2014-06-21T07:00:00.000Z',
-    end: '2014-06-21T10:00:00.000Z',
+    start: '2014-06-21T08:00:00.000Z',
+    end: '2014-06-21T11:00:00.000Z',
     location: 'Gallery'
   },
   {
     title: 'Arch',
-    start: '2014-06-22T07:00:00.000Z',
-    end: '2014-06-22T10:00:00.000Z',
+    start: '2014-06-22T08:00:00.000Z',
+    end: '2014-06-22T11:00:00.000Z',
     location: 'Arch'
   },
   {
     title: 'Garage Meeting Room',
-    start: '2014-06-23T07:00:00.000Z',
-    end: '2014-06-23T10:00:00.000Z',
+    start: '2014-06-23T08:00:00.000Z',
+    end: '2014-06-23T11:00:00.000Z',
     location: 'Garage Meeting Room'
   },
   {
     title: 'Garage',
-    start: '2014-06-24T07:00:00.000Z',
-    end: '2014-06-24T10:00:00.000Z',
+    start: '2014-06-24T08:00:00.000Z',
+    end: '2014-06-24T11:00:00.000Z',
     location: 'Garage'
   }
 ];
