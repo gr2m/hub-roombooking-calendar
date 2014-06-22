@@ -3,11 +3,12 @@
   'use strict';
 
   if (typeof define === 'function' && define.amd) {
-    define(['jquery', 'hub-roombooking-api'], function (jquery, hubRoombookingApi) {
+    define(['jquery', 'hub-roombooking-api', 'fullcalendar'], function (jquery, hubRoombookingApi) {
       root.hubRoombookingCalendar = factory(jquery, hubRoombookingApi);
       return root.hubRoombookingCalendar;
     });
   } else if (typeof exports === 'object') {
+    require('fullcalendar');
     module.exports = factory(require('jquery'), require('hub-roombooking-api'));
   } else {
     root.hubRoombookingCalendar = factory(root.jQuery, root.hubRoombookingApi);
@@ -39,14 +40,16 @@
           center: '',
           right:  'prev,next'
         },
-        agenda: 'h:mm',
-        timeFormat: 'h:mm',
+        agenda: 'H:mm',
+        timeFormat: 'H:mm',
         minTime: '07:00:00',
         firstDay: 1, // Monday
         height: 600,
         events: function(start, end, timezone, callback) {
           loadEventsPromise.done(callback);
-        }
+        },
+        unselectAuto: false,
+        allDaySlot: false
       };
       hubRoombookingApi.setup(options);
       // loadEventsPromise = hubRoombookingApi.getReservations();
@@ -113,6 +116,10 @@
       }));
     }
 
+
+    //
+    //
+    //
     api.filter = function filter(roomName) {
       roomFilter = normalize(roomName);
       if (roomFilter === 'all') {
@@ -123,13 +130,23 @@
       }
     };
 
+
+    //
+    //
+    //
+    api.select =function(start, end) {
+      $monthWeekCalendar.fullCalendar('select', start, end);
+      $dayCalendar.fullCalendar('select', start, end);
+    };
+
+
     function getSelectCallback(callback) {
       if (! callback) return;
 
       return function(start, end) {
         var error;
-        var startCheck = start.add(1, 'second');
-        var endCheck = end.subtract(1, 'second');
+        var startCheck = start.clone().add(1, 'second');
+        var endCheck = end.clone().subtract(1, 'second');
         try {
           $monthWeekCalendar.fullCalendar( 'clientEvents', function(event) {
             var eventRoom = normalize(event.location);
@@ -139,17 +156,23 @@
               return;
             }
 
-            error = new Error('Conflict');
-            error.event = event;
+            error = new Error('The selected time conflicts with an existing booking');
             throw error;
           });
-        } catch(error) {
-          if (error.event) {
-            $monthWeekCalendar.fullCalendar('unselect');
-            $dayCalendar.fullCalendar('unselect');
-          }
+        } catch(e) {}
+
+        if (!error && options.validateSelection) {
+          error = options.validateSelection(start, end);
         }
 
+        if (error) {
+          $monthWeekCalendar.fullCalendar('unselect');
+          $dayCalendar.fullCalendar('unselect');
+          if (options.error) {
+            options.error(error.message, start, end);
+          }
+          return;
+        }
 
         callback(start, end);
       };
