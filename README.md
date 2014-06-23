@@ -16,6 +16,10 @@ $( '#calendar').hubRoombookingCalendar({
   select: function(start, end) { // if not set, selecting timeframes is disabled
     // start / end are moment instances
   },
+  validateSelection: function(start, end) { // optional. If invalid, return new Error
+    var twoHoursInMs = 2 * 1000 * 60 * 60;
+    if (end.diff(start) < twoHoursInMs) return new Error('must select 2+ hours');
+  }
   filterFor: 'Small Meeting Room' // setting the filter shows only bookings that would conflict with the passed room name
 });
 

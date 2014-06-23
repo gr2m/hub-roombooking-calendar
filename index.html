@@ -43,6 +43,7 @@
         <option>Garage</option>
       </select>
     </p>
+    <div id="log"></div>
   </div>
 
   <script src="bower_components/jquery/dist/jquery.js"></script>
@@ -52,9 +53,9 @@
   <script src="bower_components/hub-roombooking-api/hub-roombooking-api.js"></script>
   <script src="hub-roombooking-calendar.js"></script>
   <script>
+    'use strict';
 
     var googleScriptId = 'AKfycbzhQl_MmOFR6KToR9lhg1QZQOK5qYl63TLPQeKJB51ax_DWSyPd';
-    var loadEventsPromise;
     var $calendar = $('#calendar');
 
     $(document).ready(function() {
@@ -62,9 +63,18 @@
       $calendar.hubRoombookingCalendar({
         googleScriptId: googleScriptId,
         select: function(start, end) {
-          console.log('SELECTED %s %s - %s', start.format('D.M.YY'), start.format('h:mm'), end.format('h:mm'))
+          var day = start.format('D.M.YY');
+          var startTime = start.format('H:mm');
+          var endTime = end.format('H:mm');
+          $('#log').text(day + ' ' + startTime + ' - ' + endTime + ' selected.');
         },
-        filterFor: 'small meeting room'
+        error: function(errorMessage) {
+          $('#log').text(errorMessage);
+        },
+        validateSelection: function(start, end) {
+          var twoHoursInMs = 2 * 1000 * 60 * 60;
+          if (end.diff(start) < twoHoursInMs) return new Error('must select 2+ hours');
+        }
       });
     });
 
