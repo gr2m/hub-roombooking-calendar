@@ -52,8 +52,8 @@
         allDaySlot: false
       };
       hubRoombookingApi.setup(options);
-      // loadEventsPromise = hubRoombookingApi.getReservations();
-      loadEventsPromise = $.Deferred().resolve(fixtures);
+      loadEventsPromise = hubRoombookingApi.getReservations();
+      // loadEventsPromise = $.Deferred().resolve(fixtures);
 
       $wrapper.append($monthWeekCalendar).append($dayCalendar).addClass('calendarWrapper');
 
