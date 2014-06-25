@@ -49,7 +49,8 @@
           loadEventsPromise.done(callback);
         },
         unselectAuto: false,
-        allDaySlot: false
+        allDaySlot: false,
+        unselect: handleUnselect
       };
       hubRoombookingApi.setup(options);
       loadEventsPromise = hubRoombookingApi.getReservations();
@@ -143,6 +144,14 @@
       $dayCalendar.fullCalendar('select', start, end);
     };
 
+    //
+    //
+    //
+    api.unselect =function() {
+      $monthWeekCalendar.fullCalendar('unselect');
+      $dayCalendar.fullCalendar('unselect');
+    };
+
 
     function getSelectCallback(callback) {
       if (! callback) return;
@@ -188,6 +197,15 @@
     }
     function handleLoading (isLoading) {
       $wrapper.toggleClass('loading', isLoading);
+    }
+
+    // might be triggered twice in some circumstances,
+    // we work around that with the timeout
+    var unselectTimeout;
+    function handleUnselect () {
+      if (!options.unselect) return;
+      clearTimeout(unselectTimeout);
+      unselectTimeout = setTimeout(options.unselect);
     }
 
     initialize();

@@ -20,12 +20,14 @@ $( '#calendar').hubRoombookingCalendar({
     var twoHoursInMs = 2 * 1000 * 60 * 60;
     if (end.diff(start) < twoHoursInMs) return new Error('must select 2+ hours');
   }
-  filterFor: 'Small Meeting Room' // setting the filter shows only bookings that would conflict with the passed room name
+  filterFor: 'Small Meeting Room', // setting the filter shows only bookings that would conflict with the passed room name,
+  unselect: handleUnselect // called when selection removed
 });
 
 // methods
 $( '#calendar').hubRoombookingCalendar('filterFor', 'Arch');
 $( '#calendar').hubRoombookingCalendar('select', start, end);
+$( '#calendar').hubRoombookingCalendar('unselect');
 ```
 
 Fine Print
