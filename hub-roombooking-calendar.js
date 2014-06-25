@@ -170,8 +170,10 @@
         }
 
         if (error) {
-          $monthWeekCalendar.fullCalendar('unselect');
-          $dayCalendar.fullCalendar('unselect');
+          // $monthWeekCalendar.fullCalendar('unselect');
+          // $dayCalendar.fullCalendar('unselect');
+          $wrapper.find('.fc-select-helper').addClass('error').html('<span>'+error.message+'</span>');
+
           if (options.error) {
             options.error(error.message, start, end);
           }
