@@ -21,7 +21,7 @@
     "bootstrap": "~3.1.1"
   },
   "dependencies": {
-    "hub-roombooking-api": "git@github.com:gr2m/hub-roombooking-api.git#gh-pages",
+    "hub-roombooking-api": "git@github.com:gr2m/hub-roombooking-api.git#1.0.0",
     "fullcalendar": "~2.0.1",
     "moment": "~2.7.0",
     "jquery-ui": "~1.10.4"
