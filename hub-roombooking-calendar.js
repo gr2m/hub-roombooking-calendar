@@ -53,7 +53,6 @@
       };
       hubRoombookingApi.setup(options);
       loadEventsPromise = hubRoombookingApi.getReservations();
-      // loadEventsPromise = $.Deferred().resolve(fixtures);
 
       $wrapper.append($monthWeekCalendar).append($dayCalendar).addClass('calendarWrapper');
 
@@ -71,6 +70,7 @@
           event.className = ['room', roomName];
           return event;
         },
+        loading: handleLoading,
         viewRender: function(view) {
           // don't use .data API here, we depend on data- attribute for CSS
           var currentViewName = $monthWeekCalendar.attr('data-view');
@@ -186,6 +186,9 @@
     function selectDay (start) {
       $dayCalendar.fullCalendar( 'gotoDate', start );
     }
+    function handleLoading (isLoading) {
+      $wrapper.toggleClass('loading', isLoading);
+    }
 
     initialize();
 
@@ -205,6 +208,7 @@
   function normalize(string) {
     return (string || '').toLowerCase().replace(/ /g, '');
   }
+
 
   // jQurey API
   $.fn.hubRoombookingCalendar = function(option) {
@@ -227,42 +231,42 @@
   return $;
 });
 
-
-var fixtures = [ // jshint ignore:line
-  {
-    title: 'Small Meeting Room',
-    start: '2014-06-19T08:00:00.000Z',
-    end: '2014-06-19T11:00:00.000Z',
-    location: 'Small Meeting Room'
-  },
-  {
-    title: 'Large Meeting Room',
-    start: '2014-06-20T08:00:00.000Z',
-    end: '2014-06-20T11:00:00.000Z',
-    location: 'Large Meeting Room'
-  },
-  {
-    title: 'Gallery',
-    start: '2014-06-21T08:00:00.000Z',
-    end: '2014-06-21T11:00:00.000Z',
-    location: 'Gallery'
-  },
-  {
-    title: 'Arch',
-    start: '2014-06-22T08:00:00.000Z',
-    end: '2014-06-22T11:00:00.000Z',
-    location: 'Arch'
-  },
-  {
-    title: 'Garage Meeting Room',
-    start: '2014-06-23T08:00:00.000Z',
-    end: '2014-06-23T11:00:00.000Z',
-    location: 'Garage Meeting Room'
-  },
-  {
-    title: 'Garage',
-    start: '2014-06-24T08:00:00.000Z',
-    end: '2014-06-24T11:00:00.000Z',
-    location: 'Garage'
-  }
-];
+// // Fixtures for debugging
+// var fixtures = [ // jshint ignore:line
+//   {
+//     title: 'Small Meeting Room',
+//     start: '2014-06-19T08:00:00.000Z',
+//     end: '2014-06-19T11:00:00.000Z',
+//     location: 'Small Meeting Room'
+//   },
+//   {
+//     title: 'Large Meeting Room',
+//     start: '2014-06-20T08:00:00.000Z',
+//     end: '2014-06-20T11:00:00.000Z',
+//     location: 'Large Meeting Room'
+//   },
+//   {
+//     title: 'Gallery',
+//     start: '2014-06-21T08:00:00.000Z',
+//     end: '2014-06-21T11:00:00.000Z',
+//     location: 'Gallery'
+//   },
+//   {
+//     title: 'Arch',
+//     start: '2014-06-22T08:00:00.000Z',
+//     end: '2014-06-22T11:00:00.000Z',
+//     location: 'Arch'
+//   },
+//   {
+//     title: 'Garage Meeting Room',
+//     start: '2014-06-23T08:00:00.000Z',
+//     end: '2014-06-23T11:00:00.000Z',
+//     location: 'Garage Meeting Room'
+//   },
+//   {
+//     title: 'Garage',
+//     start: '2014-06-24T08:00:00.000Z',
+//     end: '2014-06-24T11:00:00.000Z',
+//     location: 'Garage'
+//   }
+// ];
