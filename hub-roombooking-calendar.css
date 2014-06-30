@@ -71,6 +71,7 @@
 
 [data-filter] .room {
   opacity: 0;
+  pointer-events:none;
 }
 [data-filter] .room.smallmeetingroom {
   background-color: #202020 !important;
@@ -106,6 +107,7 @@
 [data-filter="arch"] .room.gallery,
 [data-filter="arch"] .room.arch {
   opacity: 1;
+  pointer-events:auto;
 }
 
 .fc-select-helper.error {
