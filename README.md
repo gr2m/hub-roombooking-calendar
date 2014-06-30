@@ -23,7 +23,8 @@ $( '#calendar').hubRoombookingCalendar({
   filterFor: 'Small Meeting Room', // setting the filter shows only bookings that would conflict with the passed room name,
   unselect: handleUnselect, // called when selection removed
 
-  ignoreBookingId: '12346' // if displayed in edit mode of a booking, don't show it
+  ignoreBookingId: '12346', // if displayed in edit mode of a booking, don't show it
+  ready: handleCalendarReady // called when events are loaded
 });
 
 // methods

@@ -200,15 +200,20 @@
     }
     function handleLoading (isLoading) {
       $wrapper.toggleClass('loading', isLoading);
+      if (!isLoading && options.ready) {
+        setTimeout(options.ready, 1000);
+        delete options.ready;
+      }
     }
 
     // might be triggered twice in some circumstances,
     // we work around that with the timeout
-    var unselectTimeout;
+    // var unselectTimeout;
     function handleUnselect () {
       if (!options.unselect) return;
-      clearTimeout(unselectTimeout);
-      unselectTimeout = setTimeout(options.unselect);
+      // clearTimeout(unselectTimeout);
+      // unselectTimeout = setTimeout(options.unselect);
+      options.unselect();
     }
 
     initialize();
