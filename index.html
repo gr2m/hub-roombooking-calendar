@@ -74,7 +74,8 @@
         validateSelection: function(start, end) {
           var twoHoursInMs = 2 * 1000 * 60 * 60;
           if (end.diff(start) < twoHoursInMs) return new Error('must select 2+ hours');
-        }
+        },
+        ignoreBookingId: '365939'
       });
     });
 

@@ -21,7 +21,9 @@ $( '#calendar').hubRoombookingCalendar({
     if (end.diff(start) < twoHoursInMs) return new Error('must select 2+ hours');
   }
   filterFor: 'Small Meeting Room', // setting the filter shows only bookings that would conflict with the passed room name,
-  unselect: handleUnselect // called when selection removed
+  unselect: handleUnselect, // called when selection removed
+
+  ignoreBookingId: '12346' // if displayed in edit mode of a booking, don't show it
 });
 
 // methods

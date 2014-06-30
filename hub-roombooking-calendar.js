@@ -54,7 +54,9 @@
         unselect: handleUnselect
       };
       hubRoombookingApi.setup(options);
-      loadEventsPromise = hubRoombookingApi.getReservations();
+      loadEventsPromise = hubRoombookingApi.getReservations({
+        ignore: options.ignoreBookingId
+      });
 
       $wrapper.append($monthWeekCalendar).append($dayCalendar).addClass('calendarWrapper');
 
