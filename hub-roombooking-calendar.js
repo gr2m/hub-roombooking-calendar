@@ -48,6 +48,7 @@
         events: function(start, end, timezone, callback) {
           loadEventsPromise.done(callback);
         },
+        timezone: 'local',
         unselectAuto: false,
         allDaySlot: false,
         unselect: handleUnselect
