@@ -2,7 +2,7 @@
 // the controller provieds the main methods that are exposed
 // as API. The methods are mapped in `routes`
 
-/* global GMail, ContentService, config, BookingsSpreadSheet, BookingsCalendar, TEMPLATES */
+/* global GMail, ContentService, config, BookingsSpreadSheet, BookingsCalendar, TEMPLATES, generateId */
 
 (function(global) {
   'use strict';
@@ -112,9 +112,9 @@
     // ## addBooking
     // adds a new Booking. Parameters: name, email, room
     api.addBooking = function( params ) {
-      var booking;
+      var booking = getNewBooking(params);
       try {
-        booking = bookings.add(params);
+        bookings.add(booking);
         calendar.addBooking(booking);
         gmail.send({
           recipient: booking.email,
@@ -174,6 +174,14 @@
 
     return api;
   };
+
+
+  function getNewBooking (properties) {
+    properties.id = generateId();
+    properties.timestamp = (new Date()).toISOString().substr(0,10);
+    properties.status = config.states[0];
+    return properties;
+  }
 
   // expose
   global.Controller = Controller;

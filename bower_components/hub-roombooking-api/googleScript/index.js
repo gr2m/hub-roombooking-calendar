@@ -74,7 +74,7 @@ var debugBooking = {
   // invoice contact
   invoiceName: 'Gregor Martynus',
   invoiceEmail: 'gregor+invoice@martynus.net',
-  department: 'Department',
+  additionalInvoiceData: 'Department',
   street: 'Am Mustergraben 123',
   zip: '12345',
   city: 'Buzdehude',

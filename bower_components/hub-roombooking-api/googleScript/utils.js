@@ -1,3 +1,5 @@
+/* global moment */
+
 (function(global) {
   'use strict';
 
@@ -27,5 +29,12 @@
 
     return generateId;
   })();
+
+  global.formatHours = function (hours, format) {
+    var hoursInMs;
+    if (! format) format = 'HH:mm';
+    hoursInMs = moment.duration().add(hours, 'hours').asMilliseconds();
+    return moment.utc(hoursInMs).format(format);
+  };
 
 }(this));

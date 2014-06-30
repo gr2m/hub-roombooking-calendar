@@ -10,7 +10,7 @@
       'please confirm or edit your booking request at: ',
       '{{{ baseUrl }}}#/booking/{{{ id }}}',
       '',
-      'Booking Id: {{{ memberId }}}',
+      'Booking Id: {{{ id }}}',
       'Day: {{{ day }}}',
       'Room: {{{ room }}}',
       'Start Time: {{{ startTime }}}',

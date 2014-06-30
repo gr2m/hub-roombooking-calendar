@@ -24,17 +24,15 @@
     };
 
     api.updateBooking = function(booking, oldBooking) {
+      var bookingId = booking.id || booking.bookingId;
       var day = oldBooking.day || booking.day;
       if (day instanceof Date) {
         day = day.toJSON().substr(0,10);
       }
-      var yearMonthDay = day.toString().split(/-/);
-      var bookingDate = new Date(yearMonthDay[0], yearMonthDay[1]-1,yearMonthDay[2]);
-      var daysInMs = 2 * 24 * 60 * 60 * 1000;
-      var startTime = new Date(bookingDate.getTime() - daysInMs);
-      var endTime = new Date(bookingDate.getTime() + daysInMs);
+      var startTime = moment(day).add(2, 'days').toDate();
+      var endTime = moment(day).subtract(2, 'days').toDate();
       var events = calendar.getEvents(startTime, endTime, {
-        search: booking.id
+        search: bookingId
       });
       var event = events[0];
       var atts = bookingToEvent(booking);
@@ -46,26 +44,30 @@
     };
 
     // find all bookings
-    api.findAllReservations = function(/*parameters*/) {
-      var events = api.getEventObjectsForNext6Months();
+    api.findAllReservations = function(parameters) {
+      var events = api.getFutureEvents();
 
+      if (parameters.ignore) {
+        events = events.filter(function (event) {
+          var bookingId = event.getTag('bookingId');
+          return bookingId !== parameters.ignore;
+        });
+      }
       return events.map(function(event) {
         return {
           id: event.getId(),
-          title: event.getTitle(),
+          title: event.getLocation(),
           start: event.getStartTime(),
           end: event.getEndTime(),
-          location: event.getLocation(),
-          description: event.getDescription(),
-          bookingId: event.getTag('bookingId')
+          location: event.getLocation()
         };
       });
     };
 
     // get all events
-    api.getEventObjectsForNext6Months = function() {
+    api.getFutureEvents = function() {
       var startDate = moment().startOf('day').add('days',1).toDate();
-      var endDate = moment(startDate).add('months', 6).toDate();
+      var endDate = moment(startDate).add('years', 5).toDate();
       return calendar.getEvents(startDate, endDate);
     };
 
@@ -82,17 +84,18 @@
       if (booking.day instanceof Date) {
         booking.day = booking.day.toJSON().substr(0,10);
       }
-      var yearMonthDay = booking.day.toString().split(/-/);
-      var bookingDate = new Date(yearMonthDay[0], yearMonthDay[1]-1,yearMonthDay[2]);
 
-      event.startTime = new Date(bookingDate.setHours( parseInt(booking.startTime) ));
-      event.endTime = new Date(bookingDate.setHours( parseInt(booking.startTime) + parseInt(booking.duration) ));
+      event.startTime = moment(booking.day).add(booking.startTime, 'hours').toDate();
+      event.endTime = moment(event.startTime).add(booking.duration, 'hours').toDate();
 
-      event.bookingId = booking.id;
-      event.subject = booking.room + ' by ' + booking.email;
+      event.bookingId = booking.bookingId || booking.id;
+      event.subject = booking.room + ' by ' + booking.name;
+      if (booking.email) {
+        event.subject += ' (' + booking.email + ')';
+      }
       event.location = booking.room;
       event.guests = booking.email;
-      event.description = 'Booked via zurich.impacthub.net on ' + (new Date()) + ' ('+booking.id+')';
+      event.description = 'Booked via zurich.impacthub.net on ' + (new Date()) + ' ('+event.bookingId+')\n' + JSON.stringify(booking, '', '  ');
 
       return event;
     }

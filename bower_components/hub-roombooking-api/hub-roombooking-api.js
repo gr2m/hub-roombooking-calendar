@@ -3,8 +3,8 @@
   'use strict';
 
   if (typeof define === 'function' && define.amd) {
-    define(['jquery'], function () {
-      root.hubRoombookingApi = factory('jquery');
+    define(['jquery'], function ($) {
+      root.hubRoombookingApi = factory($);
       return root.hubRoombookingApi;
     });
   } else if (typeof exports === 'object') {
@@ -45,8 +45,11 @@
     return $.getJSON(baseUrl + '&action=updateBooking/' + id + '&' + params).then(pipeResponse);
   };
 
-  api.getReservations = function() {
-    return $.getJSON(baseUrl + '&action=getReservations').then(pipeResponse);
+  api.getReservations = function(options) {
+    var url = baseUrl + '&action=getReservations';
+    if (! options) options = {};
+    if (options.ignore) url += '&ignore=' + options.ignore;
+    return $.getJSON(url).then(pipeResponse);
   };
 
   function pipeResponse(response) {

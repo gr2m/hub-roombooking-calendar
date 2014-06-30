@@ -1,4 +1,4 @@
-/* global SpreadsheetApp, generateId, config */
+/* global SpreadsheetApp, config, formatHours, moment */
 
 (function(global) {
   'use strict';
@@ -12,19 +12,7 @@
 
     // returns all current bookings
     api.findAll = function() {
-      var properties = getHeaderRow();
-
-      var rows = getDataRows();
-      var data = [];
-      for (var r = 0, l = rows.length; r < l; r++) {
-        var row = rows[r];
-        var record = {};
-        for (var p in properties) {
-          record[properties[p]] = row[p];
-        }
-        data.push(record);
-      }
-      return data;
+      return getDataRows().map(rowToBooking);
     };
 
     // returns only one booking
@@ -56,7 +44,7 @@
             }
           }
           nr = i + 2; // starting at one + header row
-          range = bookingsSheet.getRange('A'+nr+':V'+nr);
+          range = bookingsSheet.getRange('A'+nr+':W'+nr);
           range.setValues([bookingToRow(booking)]);
 
           return booking;
@@ -66,14 +54,7 @@
 
     // add new booking
     api.add = function(booking) {
-
-      booking.id = generateId();
-      booking.timestamp = (new Date()).toISOString().substr(0,10);
-      booking.status = config.states[0];
-
       bookingsSheet.appendRow( bookingToRow(booking) );
-
-      return booking;
     };
 
     //
@@ -95,6 +76,8 @@
     };
 
     function getDataRows() {
+      var lastRowNumber = bookingsSheet.getLastRow();
+      if (lastRowNumber < 2) return [];
       return bookingsSheet.getRange(2, 1, bookingsSheet.getLastRow() - 1, bookingsSheet.getLastColumn()).getValues();
     }
 
@@ -106,23 +89,15 @@
       });
     }
 
-    function formatTime(hours) {
-      var minutes;
-
-      hours = parseFloat(hours);
-      minutes = hours % 1 === 0.5 ? '30' : '00';
-      return [hours,minutes].join(':');
-    }
     function formatStartTime(booking) {
-      return formatTime(booking.startTime);
+      return formatHours(booking.startTime);
     }
     function formatDuration(booking) {
-      return formatTime(booking.duration);
+      return formatHours(booking.duration);
     }
-
     function formatEndTime(booking) {
       var hours = parseFloat(booking.startTime) + parseFloat(booking.duration);
-      return formatTime(hours);
+      return formatHours(hours);
     }
 
     function bookingToRow (booking) {
@@ -151,8 +126,41 @@
       return row;
     }
 
+    function deformatStartTime(startTime) {
+      return moment.duration(startTime).asHours();
+    }
+    function deformatEndTime(endTime) {
+      return moment.duration(endTime).asHours();
+    }
+    function deformatDuration(duration) {
+      return moment.duration(duration).asHours();
+    }
+
+    function rowToBooking (row) {
+      var formatterMap = {
+        startTime: deformatStartTime,
+        endTime: deformatEndTime,
+        duration: deformatDuration
+      };
+      var formatter;
+      var properties = getHeaderRow();
+      var record = {};
+      var property;
+      var value;
+      for (var p in properties) {
+        property = properties[p];
+        value = row[p];
+        formatter = formatterMap[property];
+        if (formatter) value = formatter(value);
+        record[property] = value;
+      }
+
+      return record;
+    }
+
     return api;
   };
+
 
   global.BookingsSpreadSheet = BookingsSpreadSheet;
 }(this));

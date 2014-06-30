@@ -26,8 +26,13 @@ api.findBooking(id);
 api.confirmBooking(id);
 api.cancelBooking(id);
 api.updateBooking(id, properties);
-api.getReservations();
+api.getReservations(); // optionally: {ignore: '<bookingId>'}
 ```
+
+Setup of Google Script Backend
+------------------------------
+
+tbd
 
 Fine Print
 ----------

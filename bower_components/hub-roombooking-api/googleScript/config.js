@@ -13,7 +13,7 @@ config.sheetName = 'Requests';
 config.calendarId = 'martynus.net_6hfsvj2oeit6o0l5ia55hscijo@group.calendar.google.com';
 
 // Alias as configured in GMAIL
-config.emailAlias = 'booking.zurich@impacthub.ch';
+// config.emailAlias = 'booking.zurich@impacthub.ch';
 
 // List of states a booking can be in
 config.states = [
@@ -44,7 +44,7 @@ config.PropertyToHeaderMap = {
 
   invoiceEmail: 'Invoice Email',
   invoiceName: 'Invoice Name',
-  department: 'Department',
+  additionalInvoiceData: 'Additional Invoice Data',
   street: 'Street',
   zip: 'Zip',
   city: 'City',

@@ -1,6 +1,7 @@
-/* global BookingsCalendar, BookingsSpreadSheet, config, _, moment, Logger, Browser */
-
+/* global BookingsCalendar, BookingsSpreadSheet, config, _, moment, Logger, Browser, sync */
+/* exported debug */
 function debug() {
+  'use strict';
   sync();
 }
 
@@ -14,7 +15,7 @@ function debug() {
     var calendar = new BookingsCalendar(config.calendarId);
     var sheet = new BookingsSpreadSheet(config.spreadsheetKey, config.sheetName);
 
-    var events = calendar.getEventObjectsForNext6Months();
+    var events = calendar.getFutureEvents();
     var sheetReservations = sheet.findAll();
     var text;
     var response;
@@ -30,6 +31,7 @@ function debug() {
     var obsoleteSheetBookingIds = _.difference(sheetBookingIds, calendarBookingIds);
     var existingBookingIds = _.intersection(calendarBookingIds, sheetBookingIds);
     var timesChangedInBookingIds = [];
+    var cancelledBookingIds = [];
 
     var eventsMapWithStartEnd = {};
     events.forEach(function(event) {
@@ -47,18 +49,21 @@ function debug() {
     sheetReservations.forEach(function(booking) {
       bookingsMapWithStartEnd[booking.bookingId] = {
         start: booking.day + ' ' + booking.startTime,
-        end: booking.day + ' ' + booking.endTime
+        end: booking.day + ' ' + booking.endTime,
+        status: booking.status
       };
     });
-
-    Logger.log(JSON.stringify(eventsMapWithStartEnd, '', '  '));
-    Logger.log(JSON.stringify(bookingsMapWithStartEnd, '', '  '));
-    return;
 
 
     existingBookingIds.forEach(function(bookingId) {
       if (eventsMapWithStartEnd[bookingId].start !== bookingsMapWithStartEnd[bookingId].start || eventsMapWithStartEnd[bookingId].end !== bookingsMapWithStartEnd[bookingId].end) {
         timesChangedInBookingIds.push(bookingId);
+      }
+    });
+
+    existingBookingIds.forEach(function(bookingId) {
+      if (bookingsMapWithStartEnd[bookingId].status === 'cancelled') {
+        cancelledBookingIds.push(bookingId);
       }
     });
 
@@ -88,7 +93,7 @@ function debug() {
     }
 
     if (timesChangedInBookingIds.length) {
-      text = '' + timesChangedInBookingIds.length + ' booking(s) have diverged times in sheet / calendar. Do you want the date/times in calendar events to be adjusted?';
+      text = '' + timesChangedInBookingIds.length + ' booking(s) have diverged times in sheet / calendar: '+timesChangedInBookingIds.join(', ')+'. Do you want the date/times in calendar events to be adjusted?';
       Logger.log(text);
       response = Browser.msgBox('Diverged Date/Times', text, Browser.Buttons.YES_NO);
       if (response === 'yes') {
@@ -98,6 +103,20 @@ function debug() {
           var endTime = moment(eventsMapWithStartEnd[id].end, DATE_TIME_FORMAT).toDate();
           event.setTime(startTime, endTime);
         });
+      }
+    }
+
+    if (cancelledBookingIds.length) {
+      text = '' + cancelledBookingIds.length + ' booking(s) have been cancelled. Do you want to remove them from calendar?';
+      Logger.log(text);
+      response = Browser.msgBox('Diverged Date/Times', text, Browser.Buttons.YES_NO);
+      if (response === 'yes') {
+         events.forEach(function(event) {
+           var bookingId = event.getTag('bookingId');
+           if (cancelledBookingIds.indexOf(bookingId) !== -1) {
+            event.deleteEvent();
+           }
+         });
       }
     }
 
