@@ -1,6 +1,6 @@
 {
   "name": "hub-roombooking-calendar",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "authors": [
     "Gregor Martynus <gregor@martynus.net>"
   ],
@@ -21,7 +21,7 @@
     "bootstrap": "~3.1.1"
   },
   "dependencies": {
-    "hub-roombooking-api": "git@github.com:gr2m/hub-roombooking-api.git#1.0.1",
+    "hub-roombooking-api": "git@github.com:gr2m/hub-roombooking-api.git#1.0.2",
     "fullcalendar": "~2.0.1",
     "moment": "~2.7.0",
     "jquery-ui": "~1.10.4"
