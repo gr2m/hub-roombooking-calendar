@@ -1,4 +1,4 @@
-/* global define */
+/* global define, moment */
 (function (root, factory) {
   'use strict';
 
@@ -179,6 +179,10 @@
 
         if (!error && options.validateSelection) {
           error = options.validateSelection(start, end);
+        }
+
+        if (start < moment()) {
+          error = new Error('Selected time is in the past');
         }
 
         if (error) {
