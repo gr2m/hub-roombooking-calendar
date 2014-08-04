@@ -42,9 +42,10 @@
         },
         agenda: 'H:mm',
         timeFormat: 'H:mm',
-        minTime: '07:00:00',
+        minTime: '08:00:00',
+        maxTime: '23:00:00',
         firstDay: 1, // Monday
-        height: 600,
+        height: 602,
         events: function(start, end, timezone, callback) {
           loadEventsPromise.done(callback);
         },

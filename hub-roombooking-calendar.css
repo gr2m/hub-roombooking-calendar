@@ -1,6 +1,10 @@
 .calendarWrapper {
   overflow: hidden;
   position: relative;
+  font-size: 12px;
+}
+.calendarWrapper .fc-agenda-slots td div {
+  height: 12px;
 }
 .calendarWrapper.loading {
   opacity: .5;
