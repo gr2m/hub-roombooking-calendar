@@ -2,6 +2,7 @@
   overflow: hidden;
   position: relative;
   font-size: 12px;
+  line-height: 17px;
 }
 .calendarWrapper .fc-agenda-slots td div {
   height: 12px;
