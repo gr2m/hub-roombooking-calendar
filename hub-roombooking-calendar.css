@@ -110,6 +110,7 @@
 [data-filter="arch"] .room.smallmeetingroom,
 [data-filter="arch"] .room.largemeetingroom,
 [data-filter="arch"] .room.gallery,
+[data-filter="arch"] .room.arch,
 [data-filter="garage"] .room.garage,
 [data-filter="garagemeetingroom"] .room.garage,
 [data-filter="garage"] .room.garagemeetingroom,
