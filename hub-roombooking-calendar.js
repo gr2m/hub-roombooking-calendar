@@ -57,7 +57,7 @@
       hubRoombookingApi.setup(options);
       loadEventsPromise = hubRoombookingApi.getReservations({
         ignore: options.ignoreBookingId
-      });
+      }).then(mapNewRoomNames);
 
       $wrapper.append($monthWeekCalendar).append($dayCalendar).addClass('calendarWrapper');
 
@@ -219,6 +219,21 @@
       // clearTimeout(unselectTimeout);
       // unselectTimeout = setTimeout(options.unselect);
       options.unselect();
+    }
+
+    //
+    function mapNewRoomNames (events) {
+      return events.map(function(event) {
+        event.title = {
+          smallmeetingroom: 'Vienna',
+          largemeetingroom: 'Sao',
+          gallery: 'Dubai',
+          arch: 'Bay',
+          garagemeetingroom: 'Singapore',
+          garage: 'Amsterdam'
+        }[normalize(event.location)];
+        return event;
+      });
     }
 
     initialize();
