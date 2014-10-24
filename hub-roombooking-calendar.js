@@ -229,8 +229,8 @@
           largemeetingroom: 'Sao',
           gallery: 'Dubai',
           arch: 'Bay',
-          garagemeetingroom: 'Singapore',
-          garage: 'Amsterdam'
+          garagemeetingroom: 'Amsterdam',
+          garage: 'Singapore'
         }[normalize(event.location)];
         return event;
       });
