@@ -56,14 +56,13 @@
   <script>
     'use strict';
 
-    // var googleScriptId = 'AKfycbzhQl_MmOFR6KToR9lhg1QZQOK5qYl63TLPQeKJB51ax_DWSyPd';
-    var googleScriptId = 'AKfycbw_tyfANJhuKZ4VXlLtb0905iuAfDdQ5LIaSqklNdqa3u0tC3k';
+    var apiUrl = 'http://member.impacthub.ch/api';
     var $calendar = $('#calendar');
 
     $(document).ready(function() {
       // page is now ready, initialize the calendar...
       $calendar.hubRoombookingCalendar({
-        googleScriptId: googleScriptId,
+        baseUrl: apiUrl,
         select: function(start, end) {
           var day = start.format('D.M.YY');
           var startTime = start.format('H:mm');

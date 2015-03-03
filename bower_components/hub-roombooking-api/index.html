@@ -27,29 +27,50 @@
 
   <div class="main">
     <p>Use your browser console :)</p>
-    <pre><code>// First you need to create a spread sheet and push the script files
-// in googleScript/ to it. See instructions below
-
-// the Id looks something like AKfycbw_tyfAnJhuKz4VXlLtb0904iuAfDdQ5LIaSqklNdqa3u0tC3k
-// you can extract it from the "Current web app URL:" in Google's script editor,
-// the form is https://script.google.com/macros/s/<googleScriptId>/exec
-var googleScriptId = 'AKfycbw_tyfAnJhuKz4VXlLtb0904iuAfDdQ5LIaSqklNdqa3u0tC3k';
-hubRoombookingApi.setup({googleScriptId: 'AKfycbw_tyfAnJhuKz4VXlLtb0904iuAfDdQ5LIaSqklNdqa3u0tC3k'})
+    <pre><code>// setup API
+hubRoombookingApi.setup({baseUrl: 'http://member.impacthub.ch/api'})
 
 // all Api methods return jQuery compatible promises for async callbacks
+hubRoombookingApi.createBooking({
+  "category": "member",
+  "name": "Joe",
+  "email": "joe@example.net",
+  "memberId": "123456",
+  "room": "smallmeetingroom",
+  "startTime": 9,
+  "duration": 2,
+  "day": "2015-02-20",
+  "invoiceName": "Bill Boss",
+  "invoiceEmail": "bill@example.com",
+  "additionalInvoiceData": "Bookkeeping Department",
+  "street": "Street name 10235",
+  "zip": "12345",
+  "city": "City",
+  "country": "Switzerland",
+  "note": "Note here"
+})
+  .done(function(booking) {
+    alert('booking created')
+    console.log(booking)
+  })
+  .fail(function(xhr, error) {
+    console.log(error)
+  })
 
-api.createBooking(properties);
-api.findBooking(id);
-api.confirmBooking(id);
-api.cancelBooking(id);
-api.updateBooking(id, properties);
-api.getReservations();</code></pre>
+hubRoombookingApi.getReservations({
+  since: '2015-02-01',
+  until: '2015-02-28'
+})
+  .done(function(reservations) {
+    alert(reservations.length + ' reservations found')
+    console.log(reservations)
+  })
+  .fail(function(xhr, error) {
+    console.log(error)
+  });</code></pre>
   </div>
 
   <script src="bower_components/jquery/dist/jquery.js"></script>
   <script src="hub-roombooking-api.js"></script>
-  <script>
-  alert(1)
-  </script>
 </body>
 </html>

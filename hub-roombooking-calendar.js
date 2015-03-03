@@ -56,7 +56,9 @@
       };
       hubRoombookingApi.setup(options);
       loadEventsPromise = hubRoombookingApi.getReservations({
-        ignore: options.ignoreBookingId
+        ignore: options.ignoreBookingId,
+        since: moment().startOf('month').format('YYYY-MM-DD'),
+        until: moment().add(1, 'year').format('YYYY-MM-DD')
       }).then(mapNewRoomNames);
 
       $wrapper.append($monthWeekCalendar).append($dayCalendar).addClass('calendarWrapper');

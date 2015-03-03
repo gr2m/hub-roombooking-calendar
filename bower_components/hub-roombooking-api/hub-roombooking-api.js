@@ -16,56 +16,32 @@
   'use strict';
 
   var api = {};
-  var baseUrl;
+  var baseUrl = 'http://member.impacthub.ch/api';
 
   api.setup = function(settings) {
-    var googleScriptId = settings.googleScriptId;
-    baseUrl = 'https://script.google.com/macros/s/'+googleScriptId+'/exec?callback=?';
+    if (settings && settings.baseUrl) {
+      baseUrl = settings.baseUrl;
+    }
   };
+
 
   api.createBooking = function(properties) {
-    var params = $.param(properties);
-    return $.getJSON(baseUrl + '&action=addBooking&'+ params).then(pipeResponse);
-  };
-
-  api.findBooking = function(id) {
-    return $.getJSON(baseUrl + '&action=getBooking/' + id).then(pipeResponse);
-  };
-
-  api.confirmBooking = function(id) {
-    return $.getJSON(baseUrl + '&action=confirmBooking/' + id).then(pipeResponse);
-  };
-
-  api.cancelBooking = function(id) {
-    return $.getJSON(baseUrl + '&action=cancelBooking/' + id).then(pipeResponse);
-  };
-
-  api.updateBooking = function(id, properties) {
-    var params = $.param( properties );
-    return $.getJSON(baseUrl + '&action=updateBooking/' + id + '&' + params).then(pipeResponse);
+    return $.ajax({
+      type: 'POST',
+      url: baseUrl + '/bookings',
+      data: properties,
+      dataType: 'json'
+    });
   };
 
   api.getReservations = function(options) {
-    var url = baseUrl + '&action=getReservations';
-    if (! options) options = {};
-    if (options.ignore) url += '&ignore=' + options.ignore;
-    return $.getJSON(url).then(pipeResponse);
+    var query = $.param(options || {});
+    return $.ajax({
+      type: 'POST',
+      url: baseUrl + '/events?'+query,
+      dataType: 'json'
+    });
   };
-
-  function pipeResponse(response) {
-    var error;
-    var defer = $.Deferred();
-    var args = Array.prototype.slice.call(arguments);
-
-    if (response.error) {
-      error = new Error(response.error.message);
-      $.extend(error, response.error);
-      return defer.reject(error).promise();
-    }
-
-    defer.resolve.apply(defer, args);
-    return defer.promise();
-  }
 
   return api;
 });

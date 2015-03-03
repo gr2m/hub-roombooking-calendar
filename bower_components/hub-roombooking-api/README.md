@@ -1,43 +1,66 @@
 Hub Roombooking API
 ===================
 
-This app is using Google Apps as its backend. All gooleScript/*.js files
-are being pushed to script.google.com. They are just checked in here for
-convenience and sanity.
+This app is using [Huble](http://www.forcebase.org/huble) as its backend.
 
-The Google Apps Script exposes a simple JSONP API, to create new booking
-requests, catch existing reservations, or update a booking. We've made
-a JavaScript wrapper around it, to make your life easier:
+The currently available APIs are
 
-```js
-// First you need to create a spread sheet and push the script files
-// in googleScript/ to it. See instructions below
-
-// the Id looks something like AKfycbw_tyfAnJhuKz4VXlLtb0904iuAfDdQ5LIaSqklNdqa3u0tC3k
-// you can extract it from the "Current web app URL:" in Google's script editor,
-// the form is https://script.google.com/macros/s/<googleScriptId>/exec
-var googleScriptId = 'AKfycbw_tyfAnJhuKz4VXlLtb0904iuAfDdQ5LIaSqklNdqa3u0tC3k';
-hubRoombookingApi.setup({googleScriptId: 'AKfycbw_tyfAnJhuKz4VXlLtb0904iuAfDdQ5LIaSqklNdqa3u0tC3k'})
-
-// all Api methods return jQuery compatible promises for async callbacks
-
-api.createBooking(properties);
-api.findBooking(id);
-api.confirmBooking(id);
-api.cancelBooking(id);
-api.updateBooking(id, properties);
-api.getReservations(); // optionally: {ignore: '<bookingId>'}
+```
+GET /calendar?since=2015-01-01&until=2015-27-01
+POST /booking
 ```
 
-Setup of Google Script Backend
-------------------------------
+We've made a JavaScript wrapper around it, to make your life easier:
 
-tbd
+```js
+// setup API
+hubRoombookingApi.setup({baseUrl: 'http://member.impacthub.ch/api'})
+
+// all Api methods return jQuery compatible promises for async callbacks
+hubRoombookingApi.createBooking({
+  "category": "member",
+  "name": "Joe",
+  "email": "joe@example.net",
+  "memberId": "123456",
+  "room": "smallmeetingroom",
+  "startTime": 9,
+  "duration": 2,
+  "day": "2015-02-20",
+  "invoiceName": "Bill Boss",
+  "invoiceEmail": "bill@example.com",
+  "additionalInvoiceData": "Bookkeeping Department",
+  "street": "Street name 10235",
+  "zip": "12345",
+  "city": "City",
+  "country": "Switzerland",
+  "note": "Note here"
+})
+  .done(function(booking) {
+    alert('booking created')
+    console.log(booking)
+  })
+  .fail(function(xhr, error) {
+    console.log(error)
+  })
+
+hubRoombookingApi.getReservations({
+  since: '2015-02-01',
+  until: '2015-02-28'
+})
+  .done(function(reservations) {
+    alert(reservations.length + ' reservations found')
+    console.log(reservations)
+  })
+  .fail(function(xhr, error) {
+    console.log(error)
+  });
+```
+
 
 Fine Print
 ----------
 
-hub-roombooking-rates.js have been authored by [Gregor Martynus](https://github.com/gr2m),
+hub-roombooking-api.js have been authored by [Gregor Martynus](https://github.com/gr2m),
 proud member at [Impact Hub Zurich](http://zurich.impacthub.net/)
 
 License: MIT
