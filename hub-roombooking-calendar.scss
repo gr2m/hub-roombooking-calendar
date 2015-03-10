@@ -1,0 +1,132 @@
+.calendarWrapper {
+  overflow: hidden;
+  position: relative;
+  font-size: 12px;
+  line-height: 17px;
+}
+.calendarWrapper .fc-agenda-slots td div {
+  height: 12px;
+}
+.calendarWrapper.loading {
+  opacity: .5;
+}
+.calendarWrapper.loading:before {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(255,255,255,.8);
+  background-image: url('data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==');
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  z-index: 9999;
+}
+.monthWeekCalendar {
+  float: left;
+  width: 66%;
+}
+.monthWeekCalendar[data-view="agendaWeek"] {
+  width: 100%;
+}
+.dayCalendar {
+  margin-left: 70%;
+  overflow: hidden;
+  min-height: 100%;
+}
+.monthWeekCalendar[data-view="agendaWeek"] + .dayCalendar {
+  display: none;
+}
+
+
+/*
+  #33ccff smallmeetingroom
+  #3366ff largemeetingroom
+  #003DF5 gallery
+  #ff3366 arch
+  #ffcc33 garagemeetingroom
+  #ff6633 garage
+*/
+.room {
+  border: 0 !important;
+  color: #fff !important;
+  transition: background-color 0.3s, opacity 0.3s;
+  opacity: 1;
+  pointer-events: none !important;
+}
+.room.smallmeetingroom {
+  background-color: #33ccff !important;
+}
+.room.largemeetingroom {
+  background-color: #3366ff !important;
+}
+.room.gallery {
+  background-color: #003DF5 !important;
+}
+.room.arch {
+  background-color: #ff3366 !important;
+}
+.room.garagemeetingroom {
+  background-color: #ffcc33 !important;
+}
+.room.garage {
+  background-color: #ff6633 !important;
+}
+
+[data-filter] .room {
+  opacity: 0;
+}
+[data-filter] .room.smallmeetingroom {
+  background-color: #202020 !important;
+}
+[data-filter] .room.largemeetingroom {
+  background-color: #202020 !important;
+}
+[data-filter] .room.gallery {
+  background-color: #202020 !important;
+}
+[data-filter] .room.arch {
+  background-color: #202020 !important;
+}
+[data-filter] .room.garagemeetingroom {
+  background-color: #202020 !important;
+}
+[data-filter] .room.garage {
+  background-color: #202020 !important;
+}
+
+[data-filter="smallmeetingroom"] .room.smallmeetingroom,
+[data-filter="smallmeetingroom"] .room.gallery,
+[data-filter="smallmeetingroom"] .room.arch,
+[data-filter="largemeetingroom"] .room.largemeetingroom,
+[data-filter="largemeetingroom"] .room.gallery,
+[data-filter="largemeetingroom"] .room.arch,
+[data-filter="gallery"] .room.smallmeetingroom,
+[data-filter="gallery"] .room.largemeetingroom,
+[data-filter="gallery"] .room.gallery,
+[data-filter="gallery"] .room.arch,
+[data-filter="arch"] .room.smallmeetingroom,
+[data-filter="arch"] .room.largemeetingroom,
+[data-filter="arch"] .room.gallery,
+[data-filter="arch"] .room.arch,
+[data-filter="garage"] .room.garage,
+[data-filter="garagemeetingroom"] .room.garage,
+[data-filter="garage"] .room.garagemeetingroom,
+[data-filter="garagemeetingroom"] .room.garagemeetingroom {
+  opacity: 1;
+}
+
+.fc-select-helper.error {
+  z-index: 8;
+  background: #c00 !important;
+  color: #fff !important;
+  opacity: 1 !important;
+  border: 0 !important;
+  padding: 0 4px !important;
+  font-weight: bold !important;
+}
+.fc-select-helper.error span {
+  background: #c00;
+}

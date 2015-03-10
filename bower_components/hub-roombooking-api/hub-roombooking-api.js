@@ -16,7 +16,7 @@
   'use strict';
 
   var api = {};
-  var baseUrl = 'http://member.impacthub.ch/api';
+  var baseUrl = 'https://www.impacthub.ch/hublebookingapi/api';
 
   api.setup = function(settings) {
     if (settings && settings.baseUrl) {
@@ -34,10 +34,18 @@
     });
   };
 
+  api.resendConfirmation = function(bookingId) {
+    return $.ajax({
+      type: 'POST',
+      url: baseUrl + '/bookings/'+bookingId+'/confirmation_notification',
+      dataType: 'json'
+    });
+  }
+
   api.getReservations = function(options) {
     var query = $.param(options || {});
     return $.ajax({
-      type: 'POST',
+      type: 'GET',
       url: baseUrl + '/events?'+query,
       dataType: 'json'
     });

@@ -1,6 +1,6 @@
 {
   "name": "hub-roombooking-api",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "authors": [
     "Gregor Martynus <gregor@martynus.net>"
   ],
@@ -21,13 +21,13 @@
     "bootstrap": "~3.1.1"
   },
   "dependencies": {},
-  "_release": "2.0.0",
+  "_release": "2.0.1",
   "_resolution": {
     "type": "version",
-    "tag": "2.0.0",
-    "commit": "a86bca94f8d88fe6a8b63fd1094c684a99080719"
+    "tag": "2.0.1",
+    "commit": "e5a66c7ca1a055174657947066e54731fee3fba5"
   },
   "_source": "git@github.com:gr2m/hub-roombooking-api.git",
-  "_target": "^2.0.0",
+  "_target": "^2.0.1",
   "_originalSource": "git@github.com:gr2m/hub-roombooking-api.git"
 }

@@ -43,6 +43,14 @@ hubRoombookingApi.createBooking({
     console.log(error)
   })
 
+hubRoombookingApi.resendConfirmation(bookingId)
+  .done(function() {
+    alert('Booking confirmation resent')
+  })
+  .fail(function(xhr, error) {
+    console.log(error)
+  })
+
 hubRoombookingApi.getReservations({
   since: '2015-02-01',
   until: '2015-02-28'
@@ -53,7 +61,7 @@ hubRoombookingApi.getReservations({
   })
   .fail(function(xhr, error) {
     console.log(error)
-  });
+  })
 ```
 
 
